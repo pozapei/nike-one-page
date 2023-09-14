@@ -9,19 +9,19 @@
           <h4>Back to store</h4>
         </div>
 
-        <img src="./assets/Nike-Swoosh (1).png" alt="">
+        <img v-if="model == 'yes'" src="./assets/black-switch.png" alt="">
+        <img v-else src="./assets/white-switch.png" alt="">
 
-        <v-switch @click="toggleDark" v-model="themeSwitcher" inset></v-switch>
+        <v-switch @click="toggleDark" v-model="model" true-value="yes" false-value="no" inset></v-switch>
       </v-nav>
       <hr class="nav-hr">
 
       <div class="wrapper">
 
+
         <div class="product-img">
           <img src="./assets/nocta.png" alt="">
-        </div>
-
-
+        </div>  
 
         <div class="product-info">
           <h2 class="product-title">{{ productName }}</h2>
@@ -34,7 +34,7 @@
           <h4 class="product-desc">{{ productDesc }}</h4>
 
           <div class="sizes">
-            <div class="size" v-for="size in sizes" :key="size"
+            <div class="size" v-for="size in  sizes " :key="size"
               :style="{ opacity: size[1] < 1 ? 0.3 : 1, cursor: size[1] < 1 ? 'default' : 'pointer' }">
               <h3>{{ size[0] }}</h3>
             </div>
@@ -55,6 +55,8 @@
           </div>
 
         </div>
+
+
       </div>
 
     </div>
@@ -66,19 +68,33 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  transition: all .3s;
 }
 
 html {
   font-family: arial;
-  overflow-y: hidden;
 }
 
 .container {
+
+  @media screen and (max-width: 1230px) {
+      h4 {
+        display: none;
+      }
+      @media screen and(max-width: 800px) {
+        .product-info{
+          display: flex;
+          align-self: center;
+        }
+      }
+    }
   width: 100%;
   height: 100vh;
   display: flex;
   flex-direction: column;
   font-family: arial;
+
+
 
   .nav-hr {
     width: 97vw;
@@ -90,6 +106,10 @@ html {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    transition: all .2s;
+
+
+
 
     img {
       width: 50px;
@@ -112,31 +132,85 @@ html {
       }
     }
 
-
-
   }
 
   .wrapper {
     display: flex;
     justify-content: space-between;
 
-    .product-img {
-      display: inline-flex;
+    @media only screen and (max-width: 800px) {
+
+      top: 0;
+      left: 0;
+      display: flex;
+      flex-direction: column;
       align-items: center;
+      justify-content: center;
+      .product-img {
+        background-color: red;
+        width: 900px;
+        top: 0;
+        position: absolute;
+        top: 8% !important;
+        margin-left: 0px !important;
+      }
+
+      .product-info {
+        top: -10vh;
+      }
+      @media screen and(max-width: 440px){
+        .product-img{
+          width: 400px;
+          img{
+            width: 398px;
+          }
+        }
+      }
+      .product-info{
+        max-width: 351px !important;
+      }
+    }
+
+    .product-img {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      top: 50%;
+      margin-left: 10%;
+      max-width: 620px;
+      flex-shrink: 5;
+      background-color: rgb(255, 255, 255);
+      height: 442px;
+      border-radius: 20px;
+      box-shadow: rgba(0, 0, 0, 0.35) 0px 0px 30px;
+      outline: 2px solid black;
+
       img {
-        position: relative;
-        top: 60%;
-        left: 15%;
-        margin-left: 10%;
-        outline: 2px solid black;
+        padding: 20px;
         max-width: 620px;
-        border-radius: 20px;
-        flex-shrink: 5;
-        margin-top: 2vh;
-        box-shadow: rgba(0, 0, 0, 0.35) 0px 0px 30px;
 
       }
 
+      @media only screen and (max-width:1230px) {
+        display: flex;
+        max-width: 520px;
+        max-height: 329px;
+        top: 70%;
+
+        img {
+          max-width: 520px;
+          max-height: 342px;
+        }
+      }
+
+      @media only screen and (max-width: 800px) {
+
+        .product-img {
+          top: 0;
+          left: 0;
+        }
+      }
     }
 
     .product-info {
@@ -148,7 +222,7 @@ html {
       flex-direction: column;
       max-width: 700px;
       max-height: 800px;
-      min-width: 600px;
+      width: 600px;
       padding: 10px;
       background-color: rgb(61, 61, 61);
       align-self: flex-end;
@@ -261,9 +335,31 @@ html {
           }
         }
       }
+
+      @media only screen and (max-width: 1230px) {
+        .product-info {
+          min-width: 420px;
+          min-height: 390px;
+
+
+        }
+
+        .quantity-container {
+          align-self: center;
+        }
+
+        .product-desc {
+          min-width: 200px;
+          height: 100px;
+          overflow: hidden;
+        }
+      }
+
     }
   }
 }
+
+
 </style>
 
 <script>
@@ -284,7 +380,8 @@ export default {
         ['XL', 15]
       ],
       counter: 1,
-      isDark: true
+      isDark: true,
+      model: 'no'
     }
 
   },
@@ -292,7 +389,8 @@ export default {
     toggleDark: function () {
       this.$vuetify.theme.dark = !this.$vuetify.theme.dark
       localStorage.setItem("toggleDark", this.$vuetify.theme.dark.toString())
-    }
+    },
+
   },
 
 };
